@@ -12,7 +12,7 @@ class ChatManager {
     constructor() {
         this.messages = [];
         this.storageKey = 'chatMessages';
-        this.serverUrl = 'https://pumped-oarfish-darling.ngrok-free.app';
+        this.serverUrl = 'http://34.72.70.53:3000';
         this.chatBox = document.querySelector('.chat__box');
         this.inputField = document.querySelector('sl-input').shadowRoot.querySelector('input');
         this.sendButton = document.querySelector('sl-button');

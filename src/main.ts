@@ -11,7 +11,7 @@ class ChatManager {
   private inputField: HTMLInputElement;
   private sendButton: HTMLElement;
   private readonly storageKey = 'chatMessages';
-  private readonly serverUrl = 'https://pumped-oarfish-darling.ngrok-free.app';
+  private readonly serverUrl = 'http://34.72.70.53:3000';
 
   constructor() {
     this.chatBox = document.querySelector('.chat__box')!;
