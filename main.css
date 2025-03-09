@@ -1,0 +1,35 @@
+.input_container {
+  width: 300px;
+  height: 400px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.chat__box {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 12px;
+  padding-right: 10px;
+  overflow-wrap: break-word;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-bottom: 1px;
+  padding: 4px;
+  word-wrap: break-word;
+}
+
+.system-message {
+  color: #a53b5e;
+}
+
+.input__box {
+  display: flex;
+}
