@@ -12,7 +12,7 @@ class ChatManager {
     constructor() {
         this.messages = [];
         this.storageKey = 'chatMessages';
-        this.serverUrl = 'http://localhost:3000/message';
+        this.serverUrl = '/message';
         this.chatBox = document.querySelector('.chat__box');
         this.inputField = document.querySelector('sl-input').shadowRoot.querySelector('input');
         this.sendButton = document.querySelector('sl-button');

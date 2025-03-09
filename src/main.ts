@@ -11,7 +11,7 @@ class ChatManager {
   private inputField: HTMLInputElement;
   private sendButton: HTMLElement;
   private readonly storageKey = 'chatMessages';
-  private readonly serverUrl = 'http://localhost:3000/message';
+  private readonly serverUrl = '/message';
 
   constructor() {
     this.chatBox = document.querySelector('.chat__box')!;
