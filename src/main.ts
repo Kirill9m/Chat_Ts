@@ -2,7 +2,7 @@ interface Message {
   type: 'user' | 'system';
   content: string;
   timestamp: number;
-  id?: string
+  id?: string;
 }
 
 class ChatManager {
@@ -11,15 +11,19 @@ class ChatManager {
   private inputField: HTMLInputElement;
   private sendButton: HTMLElement;
   private readonly storageKey = 'chatMessages';
-  private readonly serverUrl = 'http://localhost:3000/messages';
+  private readonly serverUrl = 'http://34.72.70.53:3000/messages';
 
   constructor() {
     this.chatBox = document.querySelector('.chat__box')!;
     this.inputField = document.querySelector('sl-input')!.shadowRoot!.querySelector('input')! as HTMLInputElement;
     this.sendButton = document.querySelector('sl-button')!;
 
-    this.loadMessages();
-    this.renderMessages();
+    this.initialize(); // Call the async initialize method
+  }
+
+  private async initialize(): Promise<void> {
+    await this.loadMessages(); // Wait for messages to load
+    this.renderMessages(); // Then render the messages
     this.setupEventListeners();
   }
 
@@ -31,8 +35,8 @@ class ChatManager {
       }
       const data: Message[] = await response.json();
       this.messages = data;
-       if (this.messages.length === 0) {
-        this.addSystemMessage("Hello")
+      if (this.messages.length === 0) {
+        this.addSystemMessage('Hello');
       }
     } catch (error) {
       console.error('Error loading messages:', error);
@@ -40,7 +44,9 @@ class ChatManager {
       if (storedMessages) {
         this.messages = JSON.parse(storedMessages);
       } else {
-        this.addSystemMessage('Error connecting to server. Showing old messages or nothing');
+        this.addSystemMessage(
+          'Error connecting to server. Showing old messages or nothing'
+        );
       }
     }
   }
@@ -68,7 +74,7 @@ class ChatManager {
     } catch (error) {
       console.error('Error sending messages:', error);
       this.saveMessages();
-      this.renderMessages()
+      this.renderMessages();
     }
   }
 
@@ -96,11 +102,13 @@ class ChatManager {
     this.messages.forEach((message) => {
       const messageElement = document.createElement('span');
       messageElement.classList.add('message', `${message.type}-message`);
-      messageElement.textContent = `(${new Date(message.timestamp).toLocaleTimeString()}): ${message.content}`;
+      messageElement.textContent = `(${new Date(
+        message.timestamp
+      ).toLocaleTimeString()}): ${message.content}`;
 
       this.chatBox.appendChild(messageElement);
     });
-    this.chatBox.scrollTop = this.chatBox.scrollHeight; // Scroll to bottom
+    this.chatBox.scrollTop = this.chatBox.scrollHeight;
   }
 
   private setupEventListeners(): void {

@@ -12,15 +12,19 @@ class ChatManager {
     constructor() {
         this.messages = [];
         this.storageKey = 'chatMessages';
-        this.serverUrl = 'http://localhost:3000/messages'; // Replace with your server's URL
+        this.serverUrl = 'http://34.72.70.53:3000/messages';
         this.chatBox = document.querySelector('.chat__box');
         this.inputField = document.querySelector('sl-input').shadowRoot.querySelector('input');
         this.sendButton = document.querySelector('sl-button');
-        this.loadMessages(); // Modified this line
-        this.renderMessages();
-        this.setupEventListeners();
+        this.initialize(); // Call the async initialize method
     }
-    // Load messages from the server
+    initialize() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.loadMessages(); // Wait for messages to load
+            this.renderMessages(); // Then render the messages
+            this.setupEventListeners();
+        });
+    }
     loadMessages() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -31,13 +35,11 @@ class ChatManager {
                 const data = yield response.json();
                 this.messages = data;
                 if (this.messages.length === 0) {
-                    this.addSystemMessage("Hello");
+                    this.addSystemMessage('Hello');
                 }
             }
             catch (error) {
                 console.error('Error loading messages:', error);
-                // Optionally, display an error message to the user
-                // Fallback to the local storage
                 const storedMessages = localStorage.getItem(this.storageKey);
                 if (storedMessages) {
                     this.messages = JSON.parse(storedMessages);
@@ -51,7 +53,6 @@ class ChatManager {
     saveMessages() {
         localStorage.setItem(this.storageKey, JSON.stringify(this.messages));
     }
-    //Send message to the server
     addMessage(message) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -94,14 +95,14 @@ class ChatManager {
         this.addMessage(userMessage);
     }
     renderMessages() {
-        this.chatBox.innerHTML = ''; // Clear existing messages
+        this.chatBox.innerHTML = '';
         this.messages.forEach((message) => {
             const messageElement = document.createElement('span');
             messageElement.classList.add('message', `${message.type}-message`);
             messageElement.textContent = `(${new Date(message.timestamp).toLocaleTimeString()}): ${message.content}`;
             this.chatBox.appendChild(messageElement);
         });
-        this.chatBox.scrollTop = this.chatBox.scrollHeight; // Scroll to bottom
+        this.chatBox.scrollTop = this.chatBox.scrollHeight;
     }
     setupEventListeners() {
         this.sendButton.addEventListener('click', () => {
@@ -117,11 +118,10 @@ class ChatManager {
         const messageContent = this.inputField.value.trim();
         if (messageContent) {
             this.addUserMessage(messageContent);
-            this.inputField.value = ''; // Clear the input field
+            this.inputField.value = '';
         }
     }
 }
-// Initialize the chat
 window.addEventListener('load', () => {
     new ChatManager();
 });
