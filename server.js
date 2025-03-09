@@ -7,6 +7,7 @@ const port = 3000;
 
 app.use(cors());
 app.use(express.json());
+res.setHeader('Content-Security-Policy', "upgrade-insecure-requests;");
 
 let messages = [];
 
