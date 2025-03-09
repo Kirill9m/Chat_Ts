@@ -16,11 +16,11 @@ app.use((req, res, next) => {
 
 let messages = [];
 
-app.get('/messages', (req, res) => {
+app.get('/', (req, res) => {
   res.json(messages);
 });
 
-app.post('/messages', (req, res) => {
+app.post('/', (req, res) => {
   const newMessage = req.body;
   newMessage.id = uuidv4();
   messages.push(newMessage);
