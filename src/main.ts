@@ -7,21 +7,22 @@ interface Message {
 
 class ChatManager {
   private messages: Message[] = [];
-  private chatBox: HTMLElement;
-  private inputField: HTMLInputElement;
-  private sendButton: HTMLElement;
+  private chatBox!: HTMLElement;
+  private inputField!: HTMLInputElement;
+  private sendButton!: HTMLElement;
   private readonly storageKey = 'chatMessages';
   private readonly serverUrl = '/message';
 
   constructor() {
-    this.chatBox = document.querySelector('.chat__box')!;
-    this.inputField = document.querySelector('sl-input')!.shadowRoot!.querySelector('input')! as HTMLInputElement;
-    this.sendButton = document.querySelector('sl-button')!;
-
     this.initialize(); // Call the async initialize method
   }
 
   private async initialize(): Promise<void> {
+    await customElements.whenDefined('sl-input');
+    await customElements.whenDefined('sl-button');
+    this.chatBox = document.querySelector('.chat__box')!;
+    this.inputField = document.querySelector('sl-input')!.shadowRoot!.querySelector('input')! as HTMLInputElement;
+    this.sendButton = document.querySelector('sl-button')!;
     await this.loadMessages(); // Wait for messages to load
     this.renderMessages(); // Then render the messages
     this.setupEventListeners();

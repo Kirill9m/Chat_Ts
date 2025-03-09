@@ -13,13 +13,15 @@ class ChatManager {
         this.messages = [];
         this.storageKey = 'chatMessages';
         this.serverUrl = '/message';
-        this.chatBox = document.querySelector('.chat__box');
-        this.inputField = document.querySelector('sl-input').shadowRoot.querySelector('input');
-        this.sendButton = document.querySelector('sl-button');
         this.initialize(); // Call the async initialize method
     }
     initialize() {
         return __awaiter(this, void 0, void 0, function* () {
+            yield customElements.whenDefined('sl-input');
+            yield customElements.whenDefined('sl-button');
+            this.chatBox = document.querySelector('.chat__box');
+            this.inputField = document.querySelector('sl-input').shadowRoot.querySelector('input');
+            this.sendButton = document.querySelector('sl-button');
             yield this.loadMessages(); // Wait for messages to load
             this.renderMessages(); // Then render the messages
             this.setupEventListeners();
