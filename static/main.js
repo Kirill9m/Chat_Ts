@@ -12,7 +12,7 @@ class ChatManager {
     constructor() {
         this.messages = [];
         this.storageKey = 'chatMessages';
-        this.serverUrl = 'http://34.72.70.53:3000/messages';
+        this.serverUrl = 'https://66f9-34-72-70-53.ngrok-free.app';
         this.chatBox = document.querySelector('.chat__box');
         this.inputField = document.querySelector('sl-input').shadowRoot.querySelector('input');
         this.sendButton = document.querySelector('sl-button');
