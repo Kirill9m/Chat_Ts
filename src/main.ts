@@ -9,10 +9,10 @@ class ChatManager {
   private messages: Message[] = [];
   private chatBox!: HTMLElement;
   private inputField!: HTMLInputElement;
-  private sendButton!: HTMLButtonElement; // Change to HTMLButtonElement
+  private sendButton!: HTMLButtonElement;
   private readonly storageKey = 'chatMessages';
   private readonly serverUrl = '/message';
-  private pollingInterval: number = 3000; // Poll every 3 seconds (adjust as needed)
+  private pollingInterval: number = 1000; // Poll every 3 seconds (adjust as needed)
   private pollingTimer: number | null = null;
 
   constructor() {
@@ -21,12 +21,12 @@ class ChatManager {
 
   private async initialize(): Promise<void> {
     this.chatBox = document.querySelector('.chat__box')!;
-    this.inputField = document.getElementById('messageInput')! as HTMLInputElement; // Get by ID
-    this.sendButton = document.getElementById('sendButton')! as HTMLButtonElement;// Get by ID
+    this.inputField = document.getElementById('messageInput')! as HTMLInputElement;
+    this.sendButton = document.getElementById('sendButton')! as HTMLButtonElement;
     await this.loadMessages();
     this.renderMessages();
     this.setupEventListeners();
-    this.startPolling(); // Start polling for new messages
+    this.startPolling();
   }
 
   private async loadMessages(): Promise<void> {
@@ -36,7 +36,6 @@ class ChatManager {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data: Message[] = await response.json();
-      // check for new messages
       if (data.length > this.messages.length) {
         this.messages = data;
       }
@@ -122,7 +121,7 @@ class ChatManager {
     this.sendButton.addEventListener('click', () => {
       this.sendMessage();
     });
-
+    //add the listener here
     this.inputField.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
         this.sendMessage();
