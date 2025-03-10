@@ -13,7 +13,9 @@ class ChatManager {
         this.messages = [];
         this.storageKey = 'chatMessages';
         this.serverUrl = '/message';
-        this.initialize(); // Call the async initialize method
+        this.pollingInterval = 3000; // Poll every 3 seconds (adjust as needed)
+        this.pollingTimer = null;
+        this.initialize();
     }
     initialize() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -22,9 +24,10 @@ class ChatManager {
             this.chatBox = document.querySelector('.chat__box');
             this.inputField = document.querySelector('sl-input').shadowRoot.querySelector('input');
             this.sendButton = document.querySelector('sl-button');
-            yield this.loadMessages(); // Wait for messages to load
-            this.renderMessages(); // Then render the messages
+            yield this.loadMessages();
+            this.renderMessages();
             this.setupEventListeners();
+            this.startPolling(); // Start polling for new messages
         });
     }
     loadMessages() {
@@ -35,10 +38,14 @@ class ChatManager {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = yield response.json();
-                this.messages = data;
+                // check for new messages
+                if (data.length > this.messages.length) {
+                    this.messages = data;
+                }
                 if (this.messages.length === 0) {
                     this.addSystemMessage('Hello');
                 }
+                this.renderMessages();
             }
             catch (error) {
                 console.error('Error loading messages:', error);
@@ -49,6 +56,7 @@ class ChatManager {
                 else {
                     this.addSystemMessage('Error connecting to server. Showing old messages or nothing');
                 }
+                this.renderMessages();
             }
         });
     }
@@ -121,6 +129,17 @@ class ChatManager {
         if (messageContent) {
             this.addUserMessage(messageContent);
             this.inputField.value = '';
+        }
+    }
+    startPolling() {
+        this.pollingTimer = window.setInterval(() => {
+            this.loadMessages();
+        }, this.pollingInterval);
+    }
+    stopPolling() {
+        if (this.pollingTimer !== null) {
+            clearInterval(this.pollingTimer);
+            this.pollingTimer = null;
         }
     }
 }
