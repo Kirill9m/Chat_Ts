@@ -12,9 +12,11 @@ class ChatManager {
   private sendButton!: HTMLElement;
   private readonly storageKey = 'chatMessages';
   private readonly serverUrl = '/message';
+  private pollingInterval: number = 3000; // Poll every 3 seconds (adjust as needed)
+  private pollingTimer: number | null = null;
 
   constructor() {
-    this.initialize(); // Call the async initialize method
+    this.initialize();
   }
 
   private async initialize(): Promise<void> {
@@ -23,9 +25,10 @@ class ChatManager {
     this.chatBox = document.querySelector('.chat__box')!;
     this.inputField = document.querySelector('sl-input')!.shadowRoot!.querySelector('input')! as HTMLInputElement;
     this.sendButton = document.querySelector('sl-button')!;
-    await this.loadMessages(); // Wait for messages to load
-    this.renderMessages(); // Then render the messages
+    await this.loadMessages();
+    this.renderMessages();
     this.setupEventListeners();
+    this.startPolling(); // Start polling for new messages
   }
 
   private async loadMessages(): Promise<void> {
@@ -35,10 +38,14 @@ class ChatManager {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data: Message[] = await response.json();
-      this.messages = data;
+       // check for new messages
+       if (data.length > this.messages.length){
+        this.messages = data;
+       }
       if (this.messages.length === 0) {
         this.addSystemMessage('Hello');
       }
+      this.renderMessages();
     } catch (error) {
       console.error('Error loading messages:', error);
       const storedMessages = localStorage.getItem(this.storageKey);
@@ -49,6 +56,7 @@ class ChatManager {
           'Error connecting to server. Showing old messages or nothing'
         );
       }
+      this.renderMessages();
     }
   }
 
@@ -129,6 +137,19 @@ class ChatManager {
     if (messageContent) {
       this.addUserMessage(messageContent);
       this.inputField.value = '';
+    }
+  }
+
+  private startPolling(): void {
+    this.pollingTimer = window.setInterval(() => {
+      this.loadMessages();
+    }, this.pollingInterval);
+  }
+
+  private stopPolling(): void {
+    if (this.pollingTimer !== null) {
+      clearInterval(this.pollingTimer);
+      this.pollingTimer = null;
     }
   }
 }
