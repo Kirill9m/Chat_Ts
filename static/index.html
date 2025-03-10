@@ -6,16 +6,6 @@
     <title>Public chat</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" type="text/css" media="screen" href="/static/main.css" />
-    <link
-      rel="stylesheet"
-      media="(prefers-color-scheme:dark)"
-      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/themes/dark.css"
-      onload="document.documentElement.classList.add('sl-theme-dark');"
-    />
-    <script
-      type="module"
-      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/shoelace-autoloader.js"
-    ></script>
     <script defer src="static/main.js"></script>
   </head>
 
@@ -24,8 +14,8 @@
     <div class="input_container">
       <section class="chat__box"></section>
       <div class="input__box">
-        <sl-input placeholder="Type something"></sl-input>
-        <sl-button variant="default">Send</sl-button>
+        <input type="text" id="messageInput" placeholder="Type something" />
+        <button id="sendButton">Send</button>
       </div>
     </div>
   </body>

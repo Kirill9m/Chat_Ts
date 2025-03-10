@@ -9,7 +9,7 @@ class ChatManager {
   private messages: Message[] = [];
   private chatBox!: HTMLElement;
   private inputField!: HTMLInputElement;
-  private sendButton!: HTMLElement;
+  private sendButton!: HTMLButtonElement; // Change to HTMLButtonElement
   private readonly storageKey = 'chatMessages';
   private readonly serverUrl = '/message';
   private pollingInterval: number = 3000; // Poll every 3 seconds (adjust as needed)
@@ -20,11 +20,9 @@ class ChatManager {
   }
 
   private async initialize(): Promise<void> {
-    await customElements.whenDefined('sl-input');
-    await customElements.whenDefined('sl-button');
     this.chatBox = document.querySelector('.chat__box')!;
-    this.inputField = document.querySelector('sl-input')!.shadowRoot!.querySelector('input')! as HTMLInputElement;
-    this.sendButton = document.querySelector('sl-button')!;
+    this.inputField = document.getElementById('messageInput')! as HTMLInputElement; // Get by ID
+    this.sendButton = document.getElementById('sendButton')! as HTMLButtonElement;// Get by ID
     await this.loadMessages();
     this.renderMessages();
     this.setupEventListeners();
@@ -38,10 +36,10 @@ class ChatManager {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data: Message[] = await response.json();
-       // check for new messages
-       if (data.length > this.messages.length){
+      // check for new messages
+      if (data.length > this.messages.length) {
         this.messages = data;
-       }
+      }
       if (this.messages.length === 0) {
         this.addSystemMessage('Hello');
       }

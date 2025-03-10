@@ -19,11 +19,9 @@ class ChatManager {
     }
     initialize() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield customElements.whenDefined('sl-input');
-            yield customElements.whenDefined('sl-button');
             this.chatBox = document.querySelector('.chat__box');
-            this.inputField = document.querySelector('sl-input').shadowRoot.querySelector('input');
-            this.sendButton = document.querySelector('sl-button');
+            this.inputField = document.getElementById('messageInput'); // Get by ID
+            this.sendButton = document.getElementById('sendButton'); // Get by ID
             yield this.loadMessages();
             this.renderMessages();
             this.setupEventListeners();
